@@ -19,8 +19,9 @@
 -- Version: 2.0.0
 -- ---------------------------------
 
-property code_desc : "Update method with parameter label"
-property code_version : "v2.0.0"
+property code_tag : "searching_iMessage_APIs"
+property code_desc : "Add logger to script"
+property code_version : "v2.1.1"
 
 property str_size : 100
 property iPhone_label : "iPhone"
@@ -29,28 +30,37 @@ property mobile_label : "mobile"
 property email_label : "email"
 property iCloud_label : "iCloud"
 
--- TESTING CODE
-tell application "Contacts"
-	tell SEARCH
-		-- log (getiPhone from "Nattana")
-		-- log (getiCloud from "Nattana")
-		
-		-- set pp to searchPeople by "Nat"
-		-- repeat with p in pp
-		-- log (get name of p)
-		-- end repeat
-	end tell
-end tell
--- END TESTING CODE
+----- TESTING CODE -----
+-- tell application "Contacts"
+-- tell SEARCH
+-- log (getiPhone from "Nattana")
+-- log (getiCloud from "Nattana")
+
+-- set pp to searchPeople by "Nat"
+-- repeat with p in pp
+-- log (get name of p)
+-- end repeat
+-- end tell
+-- end tell
+----- END TESTING CODE -----
 
 script SEARCH
+	-- log to system log
+	-- @params - msg - message to log
+	to syslog(msg)
+		-- log "logger -t '" & code_tag & "'" & msg
+		do shell script "logger -t '" & code_tag & "' " & "\"" & msg & "\""
+	end syslog
+	
 	-- @return only version
 	to getVersion()
+		syslog("get version " & code_version)
 		return code_version
 	end getVersion
 	
 	-- @return version and description
 	to versionToString()
+		syslog("print version " & code_version)
 		return code_desc & " (" & code_version & ")"
 	end versionToString
 	
@@ -141,10 +151,10 @@ script SEARCH
 	-- @return {people} matches with regex or list of {person} 
 	-- @throw 123 - if person with regex not found
 	to filterPeople by allPeople given regex:regex
+		syslog("filter person " & regex)
 		set peopleList to {}
 		tell application "Contacts"
 			repeat with eachPerson in allPeople
-				
 				set s to false
 				set s to my matchesTextParams(eachPerson, regex, s) -- check with text parameters
 				set s to my matchesTelephoneParams(eachPerson, regex, s) -- check with telephone parameters
@@ -155,16 +165,19 @@ script SEARCH
 					set s to false
 				end if
 			end repeat
-			
 			set s to (count peopleList)
 			-- error 
 			if s = 0 then
+				my syslog("filter person (error) zero result")
 				error "person regex = \"" & regex & "\" not found" number 123
 				-- indv person
 			else if s = 1 then
-				return first item of peopleList
+				set p to first item of peopleList
+				my syslog("filter person (result) " & (name of p))
+				return p
 				-- else people
 			else
+				my syslog("filter person (result) " & s & " person(s)")
 				return peopleList
 			end if
 		end tell
@@ -185,14 +198,17 @@ script SEARCH
 		tell application "Contacts"
 			set p to filterPeople of me by people given regex:regex
 			if class of p = list then
-				set str to return
+				set str to "
+"
 				set n to 0
 				repeat with pp in p
 					set str to str & " || " & (get name of pp)
 					set n to n + 1
-					if (n mod 5) = 0 then set str to str & return
+					if (n mod 5) = 0 then set str to str & "
+"
 				end repeat
-				error "too many person or regex not unique enough." & return & "list: (" & (count p) & ")" & (str) number 155
+				error "Too many person or regex not unique enough." & "
+" & "List: (" & (count p) & ")" & (str) number 155
 			end if
 			return p
 		end tell
