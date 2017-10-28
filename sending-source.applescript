@@ -20,8 +20,8 @@
 -- ---------------------------------
 
 -- code version and explanation
-property code_desc : "Add support parameter label in app"
-property code_version : "v2.0.0"
+property code_desc : "Fix log should use backslash+n"
+property code_version : "v2.0.1"
 
 -- library name
 property lib_name : "searching"
