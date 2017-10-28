@@ -32,13 +32,13 @@ property library : "lib/"
 -- file name
 property script_file : lib_name & script_
 
--- EXAMPLE CODE
+----- EXAMPLE CODE -----
 -- tell SEND
 -- start()
 -- sendMessageByRegex(someRegex, "test mail")
 -- versionToString()
 -- end tell
--- END EXAMPLE CODE
+----- END EXAMPLE CODE -----
 
 script SEND
 	-- run this method at first time you need to send message
@@ -59,7 +59,8 @@ script SEND
 	-- @return only version
 	to getVersion()
 		tell search of loadSearchLibrary() to set v to getVersion()
-		return "sending: " & code_version & "\n" & lib_name & ": " & v
+		return "sending: " & code_version & "
+" & lib_name & ": " & v
 	end getVersion
 	
 	-- get currently app description and library description
@@ -67,7 +68,8 @@ script SEND
 	to versionToString()
 		set l to loadSearchLibrary()
 		tell search of l to set v to versionToString()
-		return "sending: " & code_desc & " (" & code_version & ")" & "\n" & lib_name & ": " & v
+		return "sending: " & code_desc & " (" & code_version & ")" & "
+" & lib_name & ": " & v
 		return
 	end versionToString
 	
