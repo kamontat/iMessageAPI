@@ -15,13 +15,13 @@
 -- ---------------------------------
 -- Creator: Kamontat Chantrachirathumrong
 -- Create at: 20/08/2560
--- Update at: 20/08/2560
--- Version: 2.0.2
+-- Update at: 07/01/2561
+-- Version: 2.1.0
 -- ---------------------------------
 
 -- code version and explanation
-property code_desc : "run iMessage as background task"
-property code_version : "v2.1.0"
+property code_desc : "Run iMessage as background task"
+property code_version : "v2.1.1"
 
 -- library name
 property lib_name : "searching"
@@ -42,10 +42,15 @@ property script_file : lib_name & script_
 
 script SEND
 	-- run this method at first time you need to send message
-	to start()
+	to start_send()
 		launch application "Messages"
 		launch application "Contacts"
-	end start
+	end start_send
+	
+	to end_send()
+		quit application "Messages"
+		quit application "Contacts"
+	end end_send
 	
 	-- to load searching library in lib folder
 	-- @return library so you can use like `tell search of loadSearchLibrary()...`

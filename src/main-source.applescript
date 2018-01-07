@@ -18,8 +18,8 @@ To run this script,
 "
 
 -- code version and explanation
-property code_desc : "Add support version parameter"
-property code_version : "v1.0.1"
+property code_desc : "Support sent library v2.1.1"
+property code_version : "v1.0.2"
 
 to loadLibrary(libName)
 	tell application "Finder" to set theContainer to container of (path to me)
@@ -43,8 +43,9 @@ on run of params
 		
 		tell send of loadLibrary(send_lib)
 			-- log versionToString()
-			start()
+			start_send()
 			sendMessage by regex given message:msg
+			end_send()
 		end tell
 	else if (count params) = 1 and (params's item 1) = "help" then
 		log help_msg
