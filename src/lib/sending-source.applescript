@@ -16,12 +16,12 @@
 -- Creator: Kamontat Chantrachirathumrong
 -- Create at: 20/08/2560
 -- Update at: 20/08/2560
--- Version: 2.0.1
+-- Version: 2.0.2
 -- ---------------------------------
 
 -- code version and explanation
-property code_desc : "Fix log should use backslash+n"
-property code_version : "v2.0.1"
+property code_desc : "run iMessage as background task"
+property code_version : "v2.1.0"
 
 -- library name
 property lib_name : "searching"
@@ -43,8 +43,8 @@ property script_file : lib_name & script_
 script SEND
 	-- run this method at first time you need to send message
 	to start()
-		run application "Messages"
-		run application "Contacts"
+		launch application "Messages"
+		launch application "Contacts"
 	end start
 	
 	-- to load searching library in lib folder
@@ -85,6 +85,7 @@ script SEND
 	-- @throw - learn more about exception in searching library (on lib folder)
 	to _sendMessage by telephone given message:msg
 		tell application "Messages"
+			launch
 			set targetService to 1st service whose service type = iMessage
 			set targetBuddy to buddy telephone of targetService
 			send msg to targetBuddy
